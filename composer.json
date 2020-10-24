@@ -1,0 +1,23 @@
+{
+    "name": "objectivehtml/events",
+    "autoload": {
+        "psr-4": {
+            "Objectivehtml\\Events\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Events",
+            "description": "Events addon",
+            "editions": ["free", "pro"]
+        },
+        "laravel": {
+            "providers": [
+                "Objectivehtml\\Events\\ServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "rlanvin/php-rrule": "^2.2"
+    }
+}

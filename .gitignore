@@ -1,0 +1,13 @@
+.DS_Store
+/node_modules
+/public_html/hot
+/public_html/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
