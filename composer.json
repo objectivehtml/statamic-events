@@ -1,5 +1,5 @@
 {
-    "name": "objectivehtml/events",
+    "name": "objectivehtml/statamic-events",
     "autoload": {
         "psr-4": {
             "Objectivehtml\\Events\\": "src"
