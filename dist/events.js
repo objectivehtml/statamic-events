@@ -2451,7 +2451,7 @@ window.Events = _Components_Events__WEBPACK_IMPORTED_MODULE_0__["default"];
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/justinkimbrell/Sites/mountainartscouncil/addons/objectivehtml/events/resources/js/events.js */"./resources/js/events.js");
+module.exports = __webpack_require__(/*! /Users/justinkimbrell/Github/statamic-events/resources/js/events.js */"./resources/js/events.js");
 
 
 /***/ })

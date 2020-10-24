@@ -16,7 +16,8 @@
   --bg-opacity: 1;
   background-color: #f7fafc;
   background-color: rgba(247, 250, 252, var(--bg-opacity));
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   --text-opacity: 1;
   color: #2d3748;
   color: rgba(45, 55, 72, var(--text-opacity));
@@ -50,7 +51,8 @@
 }
 
 .input-text-minimal:focus {
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   --bg-opacity: 1;
   background-color: #edf2f7;
   background-color: rgba(237, 242, 247, var(--bg-opacity));
@@ -273,7 +275,8 @@ input.read-only.slug:focus {
   color: #2d3748;
   color: rgba(45, 55, 72, var(--text-opacity));
   box-shadow: none;
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   cursor: pointer;
   display: block;
   width: 100%;
@@ -477,7 +480,8 @@ input.slug:hover, input.slug:focus {
 .daterange .dr-input .dr-dates .dr-date {
   text-align: center;
   overflow: hidden;
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   font-size: 1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
