@@ -18,6 +18,8 @@
         }
     },
     "require": {
+        "php": "^7.2.5",
+        "statamic/cms": "^3.0",
         "rlanvin/php-rrule": "^2.2"
     }
 }
