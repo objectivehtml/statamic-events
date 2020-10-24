@@ -1997,7 +1997,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.activity = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/!/events/feed', {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/!/statamic-events/feed', {
         params: this.$attrs
       }).then(function (_ref3) {
         var data = _ref3.data;

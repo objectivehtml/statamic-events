@@ -55,7 +55,7 @@ export default {
         fetch() {
             this.activity = true;
 
-            axios.get('/!/events/feed', {
+            axios.get('/!/statamic-events/feed', {
                 params: this.$attrs
             }).then(({ data }) => {
                 this.activity = false;
