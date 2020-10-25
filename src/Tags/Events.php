@@ -51,7 +51,7 @@ class Events extends Collection
         return $this->index()
             ->groupBy(function($entry) {
                 $startField = $this->params->get('start_field', 'start_date');
-
+                
                 $group_by = $this->params->get('group_by', $startField);
 
                 $value = $entry->supplements()->get($group_by) ?: $entry->get($group_by);
@@ -137,7 +137,7 @@ class Events extends Collection
                     $entry->supplements()->put($recurrenceField, $rrule = new RRule($attrs));
 
                     // Get the next
-                    $occurrences = $rrule->getOccurrencesAfter(now(), false, 10);
+                    $occurrences = $rrule->getOccurrencesAfter(now(), false, $this->params->get('total_occurrences', 10));
 
                     // If event has future occurrences, supplement the data.
                     if(count($occurrences)) {
