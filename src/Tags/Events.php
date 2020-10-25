@@ -32,7 +32,7 @@ class Events extends Collection
             ->map($this->mapRecurrenceRule('start_date', 'end_date', $field))
             ->filter($this->filterFuture('start_date', 'end_date'))
             ->filter($this->filterByTtlParam('end_date'))
-            ->filter($this->filterByDate('end_date', $field))
+            // ->filter($this->filterByDate('end_date', $field))
             ->filter($this->filterByStartParam('start_date'))
             ->filter($this->filterByEndParam('end_date'))
             ->sortBy($this->sortByDate('start_date'))
@@ -88,7 +88,7 @@ class Events extends Collection
         if(!$this->params->get('start')) {
             $this->params->put('start', 'now');
         }
-
+        
         return $this->index()->slice(0, $this->params->get('total', 1));
     }
 
@@ -207,6 +207,7 @@ class Events extends Collection
         };
     }
 
+    /*
     protected function filterByDate(string $dateField, string $recurrenceField)
     {
         return function($entry) use ($dateField, $recurrenceField) {
@@ -217,4 +218,5 @@ class Events extends Collection
             return !Carbon::parse($entry->get($dateField))->isPast();
         };
     }
+    */
 }
