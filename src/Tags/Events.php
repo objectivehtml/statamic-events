@@ -37,7 +37,7 @@ class Events extends Collection
             ->filter($this->filterByEndParam('end_date'))
             ->sortBy($this->sortByDate('start_date'))
             ->splice(
-                $this->params->get('page', 1),
+                $this->params->get('page', 1) - 1,
                 $this->params->get('total', 100)
             )
             ->values();
