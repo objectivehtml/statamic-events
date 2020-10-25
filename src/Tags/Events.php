@@ -27,7 +27,7 @@ class Events extends Collection
         if(!$this->params->get('collection')) {
             $this->params->put('collection', 'events');
         }
-        
+
         return parent::index()
             ->map($this->mapRecurrenceRule('start_date', 'end_date', $field))
             ->filter($this->filterFuture('start_date', 'end_date'))
@@ -214,7 +214,7 @@ class Events extends Collection
                 return !!$rrule->getNthOccurrenceAfter(now(), 1);
             }
 
-            return Carbon::parse($entry->get($dateField))->isPast();
+            return !Carbon::parse($entry->get($dateField))->isPast();
         };
     }
 }
