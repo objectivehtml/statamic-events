@@ -28,14 +28,17 @@ class Events extends Collection
             $this->params->put('collection', 'events');
         }
 
+        $startField = $this->params->get('start_field', 'start_date');
+        $endField = $this->params->get('end_field', 'end_date');
+
         return parent::index()
-            ->map($this->mapRecurrenceRule('start_date', 'end_date', $field))
-            ->filter($this->filterFuture('start_date', 'end_date'))
-            ->filter($this->filterByTtlParam('end_date'))
-            // ->filter($this->filterByDate('end_date', $field))
-            ->filter($this->filterByStartParam('start_date'))
-            ->filter($this->filterByEndParam('end_date'))
-            ->sortBy($this->sortByDate('start_date'))
+            ->map($this->mapRecurrenceRule($startField, $endField, $field))
+            ->filter($this->filterFuture($startField, $endField))
+            ->filter($this->filterByTtlParam($endField))
+            // ->filter($this->filterByDate($endField, $field))
+            ->filter($this->filterByStartParam($startField))
+            ->filter($this->filterByEndParam($endField))
+            ->sortBy($this->sortByDate($startField))
             ->splice(
                 $this->params->get('page', 1) - 1,
                 $this->params->get('total', 100)
@@ -47,7 +50,9 @@ class Events extends Collection
     {
         return $this->index()
             ->groupBy(function($entry) {
-                $group_by = $this->params->get('group_by', 'start_date');
+                $startField = $this->params->get('start_field', 'start_date');
+
+                $group_by = $this->params->get('group_by', $startField);
 
                 $value = $entry->supplements()->get($group_by) ?: $entry->get($group_by);
 
@@ -79,7 +84,10 @@ class Events extends Collection
         }
 
         if($entry = $query->first()) {
-            return $this->mapRecurrenceRule('start_field', 'end_date', $field)($entry);
+            $startField = $this->params->get('start_field', 'start_date');
+            $endField = $this->params->get('end_field', 'end_date');
+    
+            return $this->mapRecurrenceRule($startField, $endField, $field)($entry);
         }
     }
 
