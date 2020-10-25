@@ -2,6 +2,7 @@
   "name": "events",
   "version": "0.1.0",
   "description": "",
+  "readme": "./docs/README.md",
   "scripts": {
     "symlink": "ln -sf `pwd`/dist ../../../public/vendor/events",
     "watch": "node_modules/.bin/webpack --config=node_modules/laravel-mix/setup/webpack.config.js --watch",
