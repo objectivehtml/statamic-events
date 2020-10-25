@@ -35,7 +35,7 @@ We provide a REST API for Events to make it easy to entegrate your backend with 
 ]
 ```
 
-## Axios Example
+## Basic Javascript Example
 
 ``` js
 import axios from 'axios';

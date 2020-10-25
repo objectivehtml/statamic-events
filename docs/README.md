@@ -34,4 +34,4 @@ We provide an elegant fieldtype that is loved by both users and developers. [Lea
 
 We also provide a simple widget to upload .cal files. [Learn More](./widgets/import-event.md)
 
-![Import Events Widget Preview](../screenshots/import-widget-preview.gif)
+![Import Events Widget Preview](./screenshots/import-widget-preview.gif)
