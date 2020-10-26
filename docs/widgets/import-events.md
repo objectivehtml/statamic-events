@@ -1,6 +1,6 @@
 # Import Events Widget
 
-![Import Events Widget Preview](../screenshots/import-widget-preview.gif)
+![Import Events Widget Preview](https://cdn.jsdelivr.net/gh/objectivehtml/statamic-events/docs/screenshots/import-widget-preview.gif)
 
 ## Configuration
 

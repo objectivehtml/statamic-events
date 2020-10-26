@@ -1,7 +1,6 @@
 # Events
 
-Events is a Statamic addon that converts entries into single or recurring
-events. Recurrences are defined using "recurrence rules" and are fully compliant with [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10). This addons built-in integration with [V-calendar](https://vcalendar.io/), and makes it easy to integrate with any JavaScript plugin.
+Events allows you to transform entries into single or recurring events. Recurrences are defined using [Recurrence Rule Fieldtype](./fieldtype.md) and are fully compliant with [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10).
 
 ## Features
 
@@ -28,10 +27,10 @@ We provides a number of tags to extact event data in various ways.
 
 We provide an elegant fieldtype that is loved by both users and developers. [Learn More](./fieldtype.md)
 
-![Preview of the Recurrence Rule Fieldtype](./screenshots/fieldtype-preview.gif)
+![Preview of the Recurrence Rule Fieldtype](https://cdn.jsdelivr.net/gh/objectivehtml/statamic-events/docs/screenshots/fieldtype-preview.gif)
 
 ## Import Widget
 
 We also provide a simple widget to upload .cal files. [Learn More](./widgets/import-event.md)
 
-![Import Events Widget Preview](./screenshots/import-widget-preview.gif)
+![Import Events Widget Preview](https://cdn.jsdelivr.net/gh/objectivehtml/statamic-events/docs/screenshots/fieldtype-daily-preview.gif)
