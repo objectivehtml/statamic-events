@@ -1,6 +1,6 @@
 {
     "name": "objectivehtml/statamic-events",
-    "readme": "./docs/README.md",
+    "readme": "README.md",
     "authors": [{
         "name": "Justin Kimbrell",
         "email": "support@objectivehtml.com"

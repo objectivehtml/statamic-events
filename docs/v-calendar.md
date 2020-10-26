@@ -7,9 +7,9 @@ We provide native [v-calendar support](https://vcalendar.io/). Just like the [ev
 <html>
     <head>
         <title>Basic Example</title>
-        <script src="https://unpkg.com/vue/dist/vue.js" defer></script>
-        <script src="https://unpkg.com/v-calendar" defer></script>
-        <script src="/vendor/statamic-events/js/events.js" defer></script>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/v-calendar"></script>
+        <script src="/vendor/statamic-events/js/events.js"></script>
 
         <script>
         // app.js

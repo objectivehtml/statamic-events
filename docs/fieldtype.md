@@ -1,6 +1,6 @@
 # Fieldtype
 
-The Recurrence Rule fieldtype is the heart of the plugin. This fieldtype allows you to define 1 entry for "every second Tuesday of the month", for example. We provide an elegant UI that is fully compliant to the iCalendar ([RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10).
+The Recurrence Rule fieldtype is the heart of the plugin. This fieldtype allows you to define 1 entry for "every second Tuesday of the month", for example. We provide an elegant UI that is fully compliant to the iCalendar ([RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10)).
 
 The fieldtype allows you define hourly, weekly, monthly, and yearly events. The follow are some examples and screenshots of what is possible in the fieldtype
 
