@@ -1,6 +1,6 @@
 # REST Endpoint
 
-We provide a REST API for Events to make it easy to entegrate your backend with your frontend JavaSccript applications. The endpoint makes available the same parameters available to [events tag](./tags/events.md), except by passing them as query parameters.
+We provide a REST API for Events to make it easy to integrate your backend events with your frontend JavaScript applications (like a calendar). The endpoint makes available the same parameters available to [events tag](./tags/events.md), except by passing them as query parameters.
 
 ## Base URI
 
