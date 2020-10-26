@@ -9,7 +9,7 @@ What exactly is included with this addon?
 1. [Recurrence Rule Fieldtype](./fieldtype.md)
 2. [Events Tag](./tags/events.md)
 3. [100% compatible with Forms](https://statamic.dev/forms#content)
-4. [Import widget for .cal files](import.md)
+4. [Event Import Widget for .cal files](import.md)
 5. Fully Compliant with [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10)
 6. [REST Endpoint](./rest-endpoint.md) (for JavaScript applications)
 7. [Vue Events Loader](./vue-events-loader.md)

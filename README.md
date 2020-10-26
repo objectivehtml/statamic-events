@@ -13,7 +13,7 @@ What exactly is included with this addon?
 1. [Recurrence Rule Fieldtype](https://github.com/objectivehtml/statamic-events/blob/master/docs/fieldtype.md)
 2. [Events Tag](https://github.com/objectivehtml/statamic-events/blob/master/docs/tags/events.md)
 3. [100% compatible with Forms](https://github.com/objectivehtml/statamic-events/blob/master/docs/forms.md)
-4. [Import widget for .cal files](https://github.com/objectivehtml/statamic-events/blob/master/docs/import.md)
+4. [Event Import Widget for .cal files](https://github.com/objectivehtml/statamic-events/blob/master/docs/import.md)
 5. Fully Compliant with [RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10)
 6. [REST Endpoint](https://github.com/objectivehtml/statamic-events/blob/master/docs/rest-endpoint.md) (for JavaScript applications)
 7. [Vue Events Loader](https://github.com/objectivehtml/statamic-events/blob/master/docs/vue-events-loader.md)
