@@ -4,7 +4,7 @@ Events is the easiest and most flexible way to turn your entries into a calendar
 
 ## Beta
 
-Bear with us if you run into a bug. This addon is currently free while in beta. [Report any issues](https://github.com/objectivehtml/statamic-events/issues) you find, and we will fix as fast as we can. Feel free to report any suggestions or feature requests.
+This addon is currently free while in beta. Bear with us if you run into a bug. [Report any issues](https://github.com/objectivehtml/statamic-events/issues) you find, and we will fix as fast as we can. Feel free to report any suggestions or feature requests.
 
 ## Features
 
