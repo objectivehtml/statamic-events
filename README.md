@@ -1,6 +1,10 @@
 # Events
 
-Events allows you to transform entries into single or recurring events. Recurrences are defined using the [Recurrence Rule Fieldtype](https://github.com/objectivehtml/statamic-events/blob/master/docs/fieldtype.md), which is fully compliant with [iCalendar RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10). Events is the easiest and most flexible way to turn your entries into a calendar, period.
+Events is the easiest and most flexible way to turn your entries into a calendar. Period. Events can transform simple entries into singular or robust recurring events. Recurrences are defined using the [Recurrence Rule Fieldtype](https://github.com/objectivehtml/statamic-events/blob/master/docs/fieldtype.md), which is fully compliant with [iCalendar RFC5545](https://tools.ietf.org/html/rfc5545#section-3.3.10).
+
+## Beta
+
+Bear with us if you run into a bug. This addon is currently free while in beta. [Report any issues](https://github.com/objectivehtml/statamic-events/issues) you find, and we will fix as fast as we can. Feel free to report any suggestions or feature requests.
 
 ## Features
 
