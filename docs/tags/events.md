@@ -3,11 +3,10 @@
 
 The events tag should be extremely familiar to use, because it extends Statamic's native `{{ collection }}` tag. So anything you can do with a `{{ collection }}` tag, you can tag with an `{{ events }}` tag. There are a few notable differences of course.
 
-**Date Formats**
-
+**Date Formats** \
 Unless specifically noted, most date formats will work. Meaning, all common US and EU date formats work interchangeably.
 
-## Params
+### Params
 
 | Name            | Type    | Default         | Required |
 |-----------------|---------|-----------------|----------|
@@ -22,6 +21,7 @@ Unless specifically noted, most date formats will work. Meaning, all common US a
 | start_field     | string  | start_date      | yes      |
 | total           | number  | 100             | yes      |
 | ttl             | string  |                 | no       |
+
 
 ### Collection
 
