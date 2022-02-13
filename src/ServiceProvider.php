@@ -25,7 +25,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
     
     protected $stylesheets = [
-        __DIR__.'/../dist/js/rrule.css'
+        __DIR__.'/../dist/css/rrule.css'
     ];
     
     protected $tags = [
