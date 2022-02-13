@@ -19,13 +19,13 @@ class ServiceProvider extends AddonServiceProvider
     ];
     
     protected $scripts = [
-        __DIR__.'/../dist/cp.js',
+        __DIR__.'/../dist/js/cp.js',
         // __DIR__.'/../dist/forms.js',
         // __DIR__.'/../dist/events.js'
     ];
     
     protected $stylesheets = [
-        __DIR__.'/../dist/rrule.css'
+        __DIR__.'/../dist/js/rrule.css'
     ];
     
     protected $tags = [
