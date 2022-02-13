@@ -12,7 +12,7 @@ class RRule extends Fieldtype
 
     public function view()
     {
-        return 'objectivehtml/events::rrule';
+        return 'objectivehtml/statamic-events::rrule';
     }
 
     /**

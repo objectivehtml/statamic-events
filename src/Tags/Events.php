@@ -3,18 +3,16 @@
 namespace Objectivehtml\Events\Tags;
 
 use Carbon\Carbon;
-use DateTime;
-use Exception;
+use DeepCopy\DeepCopy;
+use Illuminate\Support\Arr;
+use InvalidArgumentException;
 use RRule\RRule;
+use Statamic\Entries\EntryCollection;
 use Statamic\Facades\Collection as CollectionAPI;
 use Statamic\Tags\Collection\Collection;
 
 class Events extends Collection
 {
-    const EXCLUDED_ATTRIBUTES = [
-        'enable', 'enable_bysetpos', 'end_after', 'rrule'
-    ];
-
     /**
      * The {{ events }} tag.
      *
@@ -22,37 +20,61 @@ class Events extends Collection
      */
     public function index()
     {
-        $field = $this->params->get('field', 'recurrence_rule');
-        
         if(!$this->params->get('collection')) {
-            $this->params->put('collection', 'events');
+            throw new InvalidArgumentException(
+                'The "collection" parameter is required for the {{ events }} tag.'
+            );
         }
 
-        $startField = $this->params->get('start_field', 'start_date');
-        $endField = $this->params->get('end_field', 'end_date');
+        if(!$field = $this->params->get('field')) {
+            throw new InvalidArgumentException(
+                'The "field" parameter is required for the {{ events }} tag.'
+            );
+        }
+        
+        $beginsAtField = sprintf('%s_begins_at', $field);
+        $endsAtField = sprintf('%s_ends_at', $field);
 
-        return parent::index()
-            ->map($this->mapRecurrenceRule($startField, $endField, $field))
-            ->filter($this->filterFuture($startField, $endField))
-            ->filter($this->filterByTtlParam($endField))
-            // ->filter($this->filterByDate($endField, $field))
-            ->filter($this->filterByStartParam($startField))
-            ->filter($this->filterByEndParam($endField))
-            ->sortBy($this->sortByDate($startField))
+        $results = parent::index();
+
+        $events = is_array($results)
+            ? $results[$this->params->get('as')]
+            : $results;
+
+        $events = $events->map(
+            $this->mapRecurrenceRule($field, $beginsAtField, $endsAtField)
+        );
+
+        $events = $this->mergeOccurrences($events, $field)
+            ->filter($this->filterFuture($beginsAtField, $endsAtField))
+            ->filter($this->filterByTtlParam($endsAtField))
+            ->filter($this->filterByStartParam($beginsAtField))
+            ->filter($this->filterByEndParam($endsAtField))
+            ->sortBy($this->sortByDate($beginsAtField))
             ->splice(
                 $this->params->get('page', 1) - 1,
-                $this->params->get('total', 100)
+                $this->params->get('total', $this->params->get('limit', 100))
             )
             ->values();
+        
+        if(is_array($results)) {
+            return array_merge($results, [
+                $this->params->get('as') => $events,
+                'total_results' => $events->count()
+            ]);
+        }
+
+        return $events;
     }
+    
 
     public function byDate()
     {
         return $this->index()
             ->groupBy(function($entry) {
-                $startField = $this->params->get('start_field', 'start_date');
+                $beginsAtField = $this->params->get('start_field', 'start_date');
                 
-                $group_by = $this->params->get('group_by', $startField);
+                $group_by = $this->params->get('group_by', $beginsAtField);
 
                 $value = $entry->supplements()->get($group_by) ?: $entry->get($group_by);
 
@@ -84,10 +106,10 @@ class Events extends Collection
         }
 
         if($entry = $query->first()) {
-            $startField = $this->params->get('start_field', 'start_date');
-            $endField = $this->params->get('end_field', 'end_date');
+            $beginsAtField = $this->params->get('start_field', 'start_date');
+            $endsAtField = $this->params->get('end_field', 'end_date');
     
-            return $this->mapRecurrenceRule($startField, $endField, $field)($entry);
+            return $this->mapRecurrenceRule($beginsAtField, $endsAtField, $field)($entry);
         }
     }
 
@@ -100,78 +122,127 @@ class Events extends Collection
         return $this->index()->slice(0, $this->params->get('total', 1));
     }
 
+    // protected function setOccurrenceDate(Entry $entry, array $occurrence, string $field, string $beginsAtField, string $endsAtField)
+    // {
+    //     $data = $entry->$field;
+
+    //     Arr::set($data, 'begins_at.date', $occurrence[$beginsAtField]);
+    //     Arr::set($data, 'ends_at.date', $occurrence[$endsAtField]);
+
+    //     $entry->set($field, $data);
+
+    //     dd($entry);
+    // }
+
+    protected function mergeOccurrences(EntryCollection $events, string $field)
+    {
+        $copier = new DeepCopy();
+
+        return $events->reduce(function($carry, $event) use ($field, $copier) {
+            return collect(
+                $event->supplements()->get(sprintf('%s_occurrences', $field))
+            )->filter(function($occurrence) use ($event) {
+                return $event->supplements()
+                    ->only(array_keys($occurrence))
+                    ->diff($occurrence)
+                    ->count();
+            })->reduce(function($carry, $occurrence) use ($event, $copier) {
+                $clone = $copier->copy($event);
+
+                foreach($occurrence as $key => $value) {
+                    $clone->supplements()->put($key, $value);
+                }
+
+                return $carry->merge([$clone]);
+            }, $carry);
+        }, $events);
+    }
+
     protected function sortByDate(string $dateField)
     {
         return function($entry) use ($dateField) {
-            return $entry->supplements()->get($dateField);
+            return $entry->supplements()->get($dateField)->timestamp;
         };
     }
     
-    protected function mapRecurrenceRule(string $startField, string $endField, string $recurrenceField)
+    protected function mapRecurrenceRule(string $field, string $beginsAtField, string $endsAtField)
     {
-        return function($entry) use ($startField, $endField, $recurrenceField) {
-            $startDate = Carbon::parse($entry->get($startField));
-
-            $entry->supplements()->put($startField, $startDate);
-
-            $endDate = Carbon::parse($entry->get($endField, $entry->get($startField)));
-
-            $entry->supplements()->put($endField, $endDate);
-
-            // Get the diff in seconds from the start and end date
-            $diff = $startDate->diffInSeconds($endDate);
-
-            $entry->supplements()->put('diff_seconds', $diff);
-            
+        return function($entry) use ($field, $beginsAtField, $endsAtField) {
             // Get the recurrence field.
-            if($rrule = $entry->get($recurrenceField)) {
-                // Remove the excluded keys and merge the dtstart value.
-                $attrs = collect($rrule)->except(static::EXCLUDED_ATTRIBUTES);
+            if(!$data = $entry->get($field)) {
+                return $entry;
+            }
 
-                if($attrs->count()) {
-                    $attrs = array_merge($attrs->all(), [
-                        'dtstart' => Carbon::parse($entry->get($startField))
-                    ]);
-                    
-                    // Map the recurrence rules into an RRule instance.
-                    $entry->supplements()->put($recurrenceField, $rrule = new RRule($attrs));
+            $beginsAt = Carbon::parse(Arr::get($data, 'begins_at.date'));
 
-                    // Get the next
-                    $occurrences = $rrule->getOccurrencesAfter(now(), false, $this->params->get('total_occurrences', 10));
+            if($beginsAtTime = Arr::get($data, 'begins_at.time')) {
+                $beginsAt->setTimeFromTimeString($beginsAtTime);
+            }
 
-                    // If event has future occurrences, supplement the data.
-                    if(count($occurrences)) {
-                        $startDate = Carbon::parse($occurrences[0]);
+            $entry->supplements()->put($beginsAtField, $beginsAt);
 
-                        $entry->supplements()->put($startField, $startDate);
-                        $entry->supplements()->put($endField, $endDate = $startDate->clone()->addSeconds($diff));
+            $endsAt = Carbon::parse(
+                Arr::get($data, 'ends_at.date') ?: $beginsAt
+            );
 
-                        $occurrences = collect($occurrences)->map(function($occurrence) use ($startField, $endField, $diff) {
-                            return [
-                                $startField => $startDate = Carbon::parse($occurrence),
-                                $endField => $startDate->clone()->addSeconds($diff)
-                            ];
-                        });
-
-                        $entry->supplements()->put('occurrences', $occurrences->all());
-                    }        
-                }
+            if($endsAtTime = Arr::get($data, 'ends_at.time')) {
+                $endsAt->setTimeFromTimeString($endsAtTime);
             }
             
-            // Return the potentially transformed entry
+            $entry->supplements()->put($endsAtField, $endsAt);
+
+            $entry->supplements()->put(
+                sprintf('%s_same_day', $field), $beginsAt->format('Ymd') == $endsAt->format('Ymd')
+            );
+            
+            // Get the diff in seconds from the start and end date
+            $diff = $beginsAt->diffInSeconds($endsAt);
+
+            $entry->supplements()->put(sprintf('%s_diff_seconds', $field), $diff);
+            
+            if(Arr::get($data, 'recurring')) {
+                $rrule = new RRule(Arr::get($data, 'rrule'), $beginsAt);
+
+                // Map the recurrence rules into an RRule instance.
+                $entry->supplements()->put($field, $rrule);
+
+                // Get the next
+                $occurrences = $rrule->getOccurrencesAfter(now(), false, $this->params->get('total_occurrences', 10));
+
+                // If event has future occurrences, supplement the data.
+                if(count($occurrences)) {
+                    $beginsAt = Carbon::parse($occurrences[0]);
+
+                    $entry->supplements()->put($beginsAtField, $beginsAt);
+                    $entry->supplements()->put($endsAtField, $beginsAt->clone()->addSeconds($diff));
+
+                    $occurrences = collect($occurrences)->map(function($occurrence) use ($beginsAtField, $endsAtField, $diff) {
+                        return [
+                            $beginsAtField => $beginsAt = Carbon::parse($occurrence),
+                            $endsAtField => $beginsAt->clone()->addSeconds($diff)
+                        ];
+                    });
+
+                    $entry->supplements()->put(
+                        sprintf('%s_occurrences', $field), $occurrences->all()
+                    );
+                }
+            }
+
+            // Return the transformed entry
             return $entry;
         };
     }
     
-    protected function filterFuture(string $startField, string $endField) {
-        return function($entry) use ($startField, $endField) {
+    protected function filterFuture(string $beginsAtField, string $endsAtField) {
+        return function($entry) use ($beginsAtField, $endsAtField) {
             $future = $this->params->get('future');
 
             if($future === true) {
-                return $entry->supplements()->get($endField) >= now();
+                return $entry->supplements()->get($endsAtField) >= now();
             }
             else if($future === false) {
-                return $entry->supplements()->get($startField) < now();
+                return $entry->supplements()->get($beginsAtField) < now();
             }
 
             return true;
@@ -189,12 +260,12 @@ class Events extends Collection
         };
     }
 
-    protected function filterByStartParam(string $startField)
+    protected function filterByStartParam(string $beginsAtField)
     {
-        return function($entry) use ($startField) {
+        return function($entry) use ($beginsAtField) {
             if($start = $this->params->get('start')) {
                 return $entry->supplements()
-                    ->get($startField)
+                    ->get($beginsAtField)
                     ->isAfter(Carbon::parse($start));
             }
 
@@ -202,12 +273,12 @@ class Events extends Collection
         };
     }
 
-    protected function filterByEndParam(string $endField)
+    protected function filterByEndParam(string $endsAtField)
     {
-        return function($entry) use ($endField) {
+        return function($entry) use ($endsAtField) {
             if($end = $this->params->get('end')) {
                 return $entry->supplements()
-                    ->get($endField)
+                    ->get($endsAtField)
                     ->isBefore(Carbon::parse($end));
             }
 

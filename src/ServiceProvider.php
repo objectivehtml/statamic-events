@@ -8,7 +8,7 @@ use Statamic\Statamic;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $fieldtypes = [
-        Fieldtypes\EventDate::class,
+        // Fieldtypes\EventDate::class,
         Fieldtypes\RRule::class,
     ];
 
@@ -20,8 +20,8 @@ class ServiceProvider extends AddonServiceProvider
     
     protected $scripts = [
         __DIR__.'/../dist/cp.js',
-        __DIR__.'/../dist/forms.js',
-        __DIR__.'/../dist/events.js'
+        // __DIR__.'/../dist/forms.js',
+        // __DIR__.'/../dist/events.js'
     ];
     
     protected $stylesheets = [
@@ -40,6 +40,6 @@ class ServiceProvider extends AddonServiceProvider
     {
         parent::boot();
         
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'objectivehtml/events');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'objectivehtml/statamic-events');
     }
 }

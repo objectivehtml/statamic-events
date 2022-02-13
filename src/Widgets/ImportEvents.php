@@ -13,7 +13,7 @@ class ImportEvents extends Widget
      */
     public function html()
     {
-        return view('objectivehtml/events::widgets.import-events', [
+        return view('objectivehtml/statamic-events::widgets.import-events', [
             'title' => $this->config('title', 'Import Events'),
             'collection' => $this->config('collection', 'events'),
             'start_date' => $this->config('start_date', 'start_date'),

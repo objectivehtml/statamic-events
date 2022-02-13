@@ -4,7 +4,6 @@
   "description": "",
   "readme": "./docs/README.md",
   "scripts": {
-    "symlink": "ln -sf `pwd`/dist ../../../public/vendor/events",
     "watch": "node_modules/.bin/webpack --config=node_modules/laravel-mix/setup/webpack.config.js --watch",
     "prod": "node_modules/.bin/webpack --config=node_modules/laravel-mix/setup/webpack.config.js",
     "build": "npm run prod",

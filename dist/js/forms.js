@@ -198,11 +198,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _FormFieldType__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../FormFieldType */ "./resources/js/Components/FormFieldType.vue");
-/* harmony import */ var _RRuleByDay__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RRuleByDay */ "./resources/js/Components/Fieldtypes/RRuleByDay.vue");
-/* harmony import */ var _RRuleByMonth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RRuleByMonth */ "./resources/js/Components/Fieldtypes/RRuleByMonth.vue");
-/* harmony import */ var _RRuleByMonthDay__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RRuleByMonthDay */ "./resources/js/Components/Fieldtypes/RRuleByMonthDay.vue");
-/* harmony import */ var _RRuleSetPosition__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./RRuleSetPosition */ "./resources/js/Components/Fieldtypes/RRuleSetPosition.vue");
+/* harmony import */ var _RRuleByDay__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RRuleByDay */ "./resources/js/Components/Fieldtypes/RRuleByDay.vue");
+/* harmony import */ var _RRuleByMonth__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RRuleByMonth */ "./resources/js/Components/Fieldtypes/RRuleByMonth.vue");
+/* harmony import */ var _RRuleByMonthDay__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RRuleByMonthDay */ "./resources/js/Components/Fieldtypes/RRuleByMonthDay.vue");
+/* harmony import */ var _RRuleSetPosition__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RRuleSetPosition */ "./resources/js/Components/Fieldtypes/RRuleSetPosition.vue");
+/* harmony import */ var _TimeFieldtype__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TimeFieldtype */ "./resources/js/Components/Fieldtypes/TimeFieldtype.vue");
 //
 //
 //
@@ -319,18 +319,90 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// import FormFieldType from '../FormFieldType';
 
 
 
 
+ // window.Fieldtype = window.Fieldtype || FormFieldType;
 
-window.Fieldtype = window.Fieldtype || _FormFieldType__WEBPACK_IMPORTED_MODULE_0__["default"];
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ByDay: _RRuleByDay__WEBPACK_IMPORTED_MODULE_1__["default"],
-    ByMonth: _RRuleByMonth__WEBPACK_IMPORTED_MODULE_2__["default"],
-    ByMonthDay: _RRuleByMonthDay__WEBPACK_IMPORTED_MODULE_3__["default"],
-    SetPosition: _RRuleSetPosition__WEBPACK_IMPORTED_MODULE_4__["default"]
+    ByDay: _RRuleByDay__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ByMonth: _RRuleByMonth__WEBPACK_IMPORTED_MODULE_1__["default"],
+    ByMonthDay: _RRuleByMonthDay__WEBPACK_IMPORTED_MODULE_2__["default"],
+    SetPosition: _RRuleSetPosition__WEBPACK_IMPORTED_MODULE_3__["default"],
+    TimeFieldtype: _TimeFieldtype__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   mixins: [Fieldtype],
   props: {
@@ -363,12 +435,20 @@ window.Fieldtype = window.Fieldtype || _FormFieldType__WEBPACK_IMPORTED_MODULE_0
     }
 
     return {
+      begins_at: {
+        date: value.begins_at && value.begins_at.date && new Date(value.begins_at.date),
+        time: value.begins_at && value.begins_at.time
+      },
+      ends_at: {
+        date: value.ends_at && value.ends_at.date && new Date(value.ends_at.date),
+        time: value.ends_at && value.ends_at.time
+      },
       byday: value.byday,
       bymonth: value.bymonth,
       bymonthday: value.bymonthday,
       bysetpos: value.bysetpos,
       count: value.count || '1',
-      enable: value.enable,
+      recurring: value.recurring,
       enable_bysetpos: value.enable_bysetpos || false,
       end_after: value.end_after,
       freq: value.freq,
@@ -402,7 +482,7 @@ window.Fieldtype = window.Fieldtype || _FormFieldType__WEBPACK_IMPORTED_MODULE_0
         }
 
         if (Array.isArray(_this2[key])) {
-          return "".concat(key.toUpperCase(), "=").concat(_this2[key].join(','));
+          return _this2[key].length && "".concat(key.toUpperCase(), "=").concat(_this2[key].join(','));
         }
 
         if (_this2[key]) {
@@ -410,7 +490,7 @@ window.Fieldtype = window.Fieldtype || _FormFieldType__WEBPACK_IMPORTED_MODULE_0
         }
       }).filter(function (value) {
         return !!value;
-      }).join(';') : null;
+      }).join(';') : undefined;
     },
     toString: function toString() {
       var parts = {
@@ -848,7 +928,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     changed: function changed() {
-      this.$emit('input', "".concat(this.hour, ":").concat(this.minute));
+      this.$emit('input', this.hour && this.minute && "".concat(this.hour, ":").concat(this.minute));
     },
     pad: function pad(val) {
       return ('00' + val).substr(-2, 2);
@@ -23599,47 +23679,241 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "mb-1" }, [
-      _c("label", { staticClass: "flex items-center my-2" }, [
+  return _c("div", { staticClass: "rrule" }, [
+    _c("div", { staticClass: "flex flex-col" }, [
+      _c("div", { staticClass: "mb-3" }, [
+        _c("label", [_vm._v("Begins At")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex" }, [
+          _c(
+            "div",
+            {
+              staticClass: "date-time-container mr-2",
+              class: { narrow: _vm.containerWidth <= 260 }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "flex-1 date-container input-group" },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "input-group-prepend flex items-center" },
+                    [
+                      _c("svg-icon", {
+                        staticClass: "w-4 h-4",
+                        attrs: { name: "calendar" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-date-picker", {
+                    staticClass:
+                      "input-text flex border border-grey-50 border-l-0",
+                    attrs: {
+                      formats: "MM/DD/YYYY",
+                      popover: { visibility: "click" },
+                      locale: _vm.$config.get("locale"),
+                      "is-required": true
+                    },
+                    on: { input: _vm.onInput },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var inputProps = ref.inputProps
+                          var inputEvents = ref.inputEvents
+                          return _c(
+                            "input",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass:
+                                    "bg-transparent leading-none w-full focus:outline-none",
+                                  attrs: { "is-read-only": !_vm.recurring }
+                                },
+                                "input",
+                                inputProps,
+                                false
+                              ),
+                              inputEvents
+                            )
+                          )
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.begins_at.date,
+                      callback: function($$v) {
+                        _vm.$set(_vm.begins_at, "date", $$v)
+                      },
+                      expression: "begins_at.date"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            [
+              _c("time-fieldtype", {
+                on: { input: _vm.onInput },
+                model: {
+                  value: _vm.begins_at.time,
+                  callback: function($$v) {
+                    _vm.$set(_vm.begins_at, "time", $$v)
+                  },
+                  expression: "begins_at.time"
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mb-3" }, [
+        _c("label", [_vm._v("Ends At")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex" }, [
+          _c(
+            "div",
+            {
+              staticClass: "date-time-container mr-2",
+              class: { narrow: _vm.containerWidth <= 260 }
+            },
+            [
+              _c(
+                "div",
+                { staticClass: "flex-1 date-container input-group" },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "input-group-prepend flex items-center" },
+                    [
+                      _c("svg-icon", {
+                        staticClass: "w-4 h-4",
+                        attrs: { name: "calendar" }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-date-picker", {
+                    staticClass:
+                      "input-text flex border border-grey-50 border-l-0",
+                    attrs: {
+                      formats: "MM/DD/YYYY",
+                      popover: { visibility: "click" },
+                      locale: _vm.$config.get("locale"),
+                      "is-required": true
+                    },
+                    on: { input: _vm.onInput },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(ref) {
+                          var inputProps = ref.inputProps
+                          var inputEvents = ref.inputEvents
+                          return _c(
+                            "input",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  staticClass:
+                                    "bg-transparent leading-none w-full focus:outline-none",
+                                  attrs: { "is-read-only": !_vm.recurring }
+                                },
+                                "input",
+                                inputProps,
+                                false
+                              ),
+                              inputEvents
+                            )
+                          )
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.ends_at.date,
+                      callback: function($$v) {
+                        _vm.$set(_vm.ends_at, "date", $$v)
+                      },
+                      expression: "ends_at.date"
+                    }
+                  })
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            [
+              _c("time-fieldtype", {
+                on: { input: _vm.onInput },
+                model: {
+                  value: _vm.ends_at.time,
+                  callback: function($$v) {
+                    _vm.$set(_vm.ends_at, "time", $$v)
+                  },
+                  expression: "ends_at.time"
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-3" }, [
+      _c("label", { staticClass: "flex items-center" }, [
         _c("input", {
           directives: [
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.enable,
-              expression: "enable"
+              value: _vm.recurring,
+              expression: "recurring"
             }
           ],
           staticClass: "mr-1",
           attrs: { type: "checkbox" },
           domProps: {
-            checked: Array.isArray(_vm.enable)
-              ? _vm._i(_vm.enable, null) > -1
-              : _vm.enable
+            checked: Array.isArray(_vm.recurring)
+              ? _vm._i(_vm.recurring, null) > -1
+              : _vm.recurring
           },
           on: {
             input: _vm.onInput,
             change: function($event) {
-              var $$a = _vm.enable,
+              var $$a = _vm.recurring,
                 $$el = $event.target,
                 $$c = $$el.checked ? true : false
               if (Array.isArray($$a)) {
                 var $$v = null,
                   $$i = _vm._i($$a, $$v)
                 if ($$el.checked) {
-                  $$i < 0 && (_vm.enable = $$a.concat([$$v]))
+                  $$i < 0 && (_vm.recurring = $$a.concat([$$v]))
                 } else {
                   $$i > -1 &&
-                    (_vm.enable = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+                    (_vm.recurring = $$a
+                      .slice(0, $$i)
+                      .concat($$a.slice($$i + 1)))
                 }
               } else {
-                _vm.enable = $$c
+                _vm.recurring = $$c
               }
             }
           }
         }),
-        _vm._v(" Enable\n        ")
+        _vm._v(" Recurring Event\n        ")
       ])
     ]),
     _vm._v(" "),
@@ -23651,7 +23925,7 @@ var render = function() {
         _vm._v(" "),
         _c("select-input", {
           attrs: {
-            "is-read-only": !_vm.enable,
+            "is-read-only": !_vm.recurring,
             options: [
               { value: null, label: "Select One" },
               { value: "HOURLY", label: "Hourly" },
@@ -23683,7 +23957,7 @@ var render = function() {
               _vm._v("\n            Every "),
               _c("text-input", {
                 staticClass: "w-10 mx-1",
-                attrs: { "is-read-only": !_vm.enable },
+                attrs: { "is-read-only": !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.interval,
@@ -23705,7 +23979,7 @@ var render = function() {
               _vm._v("\n            Every "),
               _c("text-input", {
                 staticClass: "w-10 mx-1",
-                attrs: { "is-read-only": !_vm.enable },
+                attrs: { "is-read-only": !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.interval,
@@ -23730,7 +24004,7 @@ var render = function() {
                   _vm._v("\n                Every "),
                   _c("text-input", {
                     staticClass: "w-10 mx-1",
-                    attrs: { "is-read-only": !_vm.enable },
+                    attrs: { "is-read-only": !_vm.recurring },
                     on: { input: _vm.onInput },
                     model: {
                       value: _vm.interval,
@@ -23746,7 +24020,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("by-day", {
-                attrs: { value: _vm.byday, disabled: !_vm.enable },
+                attrs: { value: _vm.byday, disabled: !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.byday,
@@ -23770,7 +24044,7 @@ var render = function() {
                   _vm._v("\n                Every "),
                   _c("text-input", {
                     staticClass: "w-10 mx-1",
-                    attrs: { "is-read-only": !_vm.enable },
+                    attrs: { "is-read-only": !_vm.recurring },
                     on: { input: _vm.onInput },
                     model: {
                       value: _vm.interval,
@@ -23786,7 +24060,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("by-month-day", {
-                attrs: { disabled: !_vm.enable },
+                attrs: { disabled: !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.bymonthday,
@@ -23863,7 +24137,7 @@ var render = function() {
                   _vm._v("\n                Every "),
                   _c("text-input", {
                     staticClass: "w-10 mx-1",
-                    attrs: { "is-read-only": !_vm.enable },
+                    attrs: { "is-read-only": !_vm.recurring },
                     on: { input: _vm.onInput },
                     model: {
                       value: _vm.interval,
@@ -23880,7 +24154,7 @@ var render = function() {
               _vm._v(" "),
               _c("by-month", {
                 staticClass: "mb-2",
-                attrs: { disabled: !_vm.enable },
+                attrs: { disabled: !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.bymonth,
@@ -23893,7 +24167,7 @@ var render = function() {
               _vm._v(" "),
               _c("by-month-day", {
                 staticClass: "mb-1",
-                attrs: { disabled: !_vm.enable },
+                attrs: { disabled: !_vm.recurring },
                 on: { input: _vm.onInput },
                 model: {
                   value: _vm.bymonthday,
@@ -23971,7 +24245,7 @@ var render = function() {
         [
           _c("select-input", {
             attrs: {
-              "is-read-only": !_vm.enable,
+              "is-read-only": !_vm.recurring,
               options: [
                 { value: null, label: "Never" },
                 { value: "count", label: "After" },
@@ -23996,7 +24270,7 @@ var render = function() {
                 [
                   _c("text-input", {
                     staticClass: "w-8 mx-1",
-                    attrs: { type: "text", "is-read-only": !_vm.enable },
+                    attrs: { type: "text", "is-read-only": !_vm.recurring },
                     on: { input: _vm.onInput },
                     model: {
                       value: _vm.count,
@@ -24060,7 +24334,9 @@ var render = function() {
                                       {
                                         staticClass:
                                           "bg-transparent leading-none w-full focus:outline-none",
-                                        attrs: { "is-read-only": !_vm.enable }
+                                        attrs: {
+                                          "is-read-only": !_vm.recurring
+                                        }
                                       },
                                       "input",
                                       inputProps,
@@ -24563,7 +24839,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      !_vm.required && !_vm.isReadOnly
+      !_vm.required && !_vm.isReadOnly && !!_vm.data
         ? _c(
             "button",
             {
@@ -37681,7 +37957,7 @@ webpackContext.id = "./resources/svg sync recursive ./!./!./node_modules/html-lo
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/justinkimbrell/Github/statamic-events/resources/js/forms.js */"./resources/js/forms.js");
+module.exports = __webpack_require__(/*! /Users/justinkimbrell/Code/statamic-events/resources/js/forms.js */"./resources/js/forms.js");
 
 
 /***/ })

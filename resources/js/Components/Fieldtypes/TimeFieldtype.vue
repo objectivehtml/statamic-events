@@ -44,7 +44,7 @@
                 </div>
             </div>
             <button
-                v-if="! required && ! isReadOnly"
+                v-if="!required && !isReadOnly && !!data"
                 class="btn-close ml-sm"
                 tabindex="0"
                 @click.prevent="clear"
@@ -132,7 +132,7 @@ export default {
 
     methods: {
         changed() {
-            this.$emit('input', `${this.hour}:${this.minute}`);
+            this.$emit('input', this.hour && this.minute && `${this.hour}:${this.minute}`);
         },
 
         pad: function(val) {

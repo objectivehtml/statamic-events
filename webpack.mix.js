@@ -14,8 +14,8 @@ require('mix-tailwindcss');
  */
 
 mix
-    .js('resources/js/cp.js', 'dist')
-    .js('resources/js/forms.js', 'dist')
-    .js('resources/js/events.js', 'dist')
-    .sass('resources/scss/rrule.scss', 'dist')
+    .js('resources/js/cp.js', 'dist/js')
+    .js('resources/js/forms.js', 'dist/js')
+    .js('resources/js/events.js', 'dist/js')
+    .sass('resources/scss/rrule.scss', 'dist/css')
     .tailwind();
