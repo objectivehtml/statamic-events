@@ -23,7 +23,8 @@
                         @keydown.186.prevent="focusMinute"
                         @keydown.190.prevent="focusMinute"
                         @focus="$emit('focus')"
-                        @blur="$emit('blur')">
+                        @blur="$emit('blur')"
+                        @input="e => onInput(e, 23)">
                     <span class="colon">:</span>
                     <input
                         ref="minute"
@@ -40,7 +41,8 @@
                         @keydown.down.prevent="incrementMinute(-1)"
                         @keydown.esc="clear"
                         @focus="$emit('focus')"
-                        @blur="$emit('blur')">
+                        @blur="$emit('blur')"
+                        @input="e => onInput(e, 59)">
                 </div>
             </div>
             <button
@@ -76,14 +78,20 @@ export default {
         hour: {
             set: function(val) {
                 this.ensureTime();
+                
                 var time = this.data.split(':');
                 var hour = parseInt(val);
+
+                if(isNaN(hour)) {
+                    hour = 0;
+                }
 
                 // ensure you cant go beyond the range
                 hour = (hour > 23) ? 23 : hour;
                 hour = (hour < 0) ? 0 : hour;
 
                 time[0] = this.pad(hour);
+
                 this.data = time.join(':');
             },
             get: function() {
@@ -96,6 +104,10 @@ export default {
                 this.ensureTime();
                 var time = this.data.split(':');
                 var minute = parseInt(val);
+
+                if(isNaN(minute)) {
+                    minute = 0;
+                }
 
                 // ensure you cant go beyond the range
                 minute = (minute > 59) ? 59 : minute;
@@ -183,6 +195,18 @@ export default {
 
         focus() {
             this.$refs.hour.focus();
+        },
+
+        onInput(e, max) {
+            var hour = parseInt(e.target.value);
+
+            if(isNaN(hour)) {
+                hour = 0;
+            }
+
+            if(hour > max) {
+                e.target.value = max;
+            }
         }
     }
 };

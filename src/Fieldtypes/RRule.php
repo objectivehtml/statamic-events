@@ -2,6 +2,8 @@
 
 namespace Objectivehtml\Events\Fieldtypes;
 
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Statamic\Fields\Fieldtype;
 
 class RRule extends Fieldtype
@@ -33,7 +35,19 @@ class RRule extends Fieldtype
      */
     public function preProcess($data)
     {
-        return $data;
+        $beginsAt = Arr::get($data, 'begins_at');
+        $endsAt = Arr::get($data, 'ends_at');
+
+        return array_merge($data ?: [], [
+            'begins_at' => [
+                'date' => $beginsAt ? Carbon::parse($beginsAt)->format('c') : null,
+                'time' => $beginsAt ? Carbon::parse($beginsAt)->format('H:i') : null,
+            ],
+            'ends_at' => [
+                'date' => $endsAt ? Carbon::parse($endsAt)->format('c') : null,
+                'time' => $endsAt ? Carbon::parse($endsAt)->format('H:i') : null,
+            ]
+        ]);
     }
 
     /**
@@ -44,7 +58,26 @@ class RRule extends Fieldtype
      */
     public function process($data)
     {
-        return $data;
+        $beginsAtDate = Arr::get($data, 'begins_at.date');
+        $beginsAtTime = Arr::get($data, 'begins_at.time');
+
+        $beginsAt = $beginsAtDate
+            ? Carbon::parse($beginsAtDate)->setTimeFromTimeString($beginsAtTime)
+            : null;
+
+        $endsAtDate = Arr::get($data, 'ends_at.date');
+        $endsAtTime = Arr::get($data, 'ends_at.time');
+
+        $endsAt = $endsAtDate || $beginsAtDate
+            ? Carbon::parse($endsAtDate ?? $beginsAtDate)
+                ->setTimeFromTimeString($endsAtTime ?? $beginsAtTime)
+            : $beginsAt;
+
+        return array_merge($data, [
+            'begins_at' => $beginsAt,
+            'ends_at' => $endsAt,
+            'single_day' => $beginsAt->diffInDays($endsAt) == 0
+        ]);
     }
 
     /**

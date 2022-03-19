@@ -20,12 +20,13 @@
                                 :locale="$config.get('locale')"
                                 :is-required="true"
                                 @input="onInput">
-                                <input
-                                    slot-scope="{ inputProps, inputEvents }"
-                                    class="bg-transparent leading-none w-full focus:outline-none"
-                                    :is-read-only="!recurring"
-                                    v-bind="inputProps"
-                                    v-on="inputEvents">
+                                <template v-slot="{ inputValue, inputEvents }">
+                                    <input
+                                        class="bg-transparent leading-none w-full focus:outline-none"
+                                        :is-read-only="!recurring"
+                                        :value="inputValue"
+                                        v-on="inputEvents">
+                                </template>
                             </v-date-picker>
                         </div>
                     </div>
@@ -53,12 +54,13 @@
                                 :locale="$config.get('locale')"
                                 :is-required="true"
                                 @input="onInput">
-                                <input
-                                    slot-scope="{ inputProps, inputEvents }"
-                                    class="bg-transparent leading-none w-full focus:outline-none"
-                                    :is-read-only="!recurring"
-                                    v-bind="inputProps"
-                                    v-on="inputEvents">
+                                <template v-slot="{ inputValue, inputEvents }">
+                                    <input
+                                        class="bg-transparent leading-none w-full focus:outline-none"
+                                        :is-read-only="!recurring"
+                                        :value="inputValue"
+                                        v-on="inputEvents">
+                                </template>
                             </v-date-picker>
                         </div>
                     </div>
@@ -167,20 +169,24 @@
                                 :locale="$config.get('locale')"
                                 :is-required="true"
                                 @input="onInput">
-                                <input
-                                    slot-scope="{ inputProps, inputEvents }"
-                                    class="bg-transparent leading-none w-full focus:outline-none"
-                                    :is-read-only="!recurring"
-                                    v-bind="inputProps"
-                                    v-on="inputEvents">
+                                <template v-slot="{ inputValue, inputEvents }">
+                                    <input
+                                        class="bg-transparent leading-none w-full focus:outline-none"
+                                        :is-read-only="!recurring"
+                                        :value="inputValue"
+                                        v-on="inputEvents">
+                                </template>
                             </v-date-picker>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <label>RRULE as per <a href="http://www.kanzaki.com/docs/ical/rrule.html" class="text-underline text-blue-500">iCalendar RFC</a>.</label>
-        <pre><code>{{ rrule }}</code></pre>
+        {{rrule}}
+        <template v-if="rrule">
+            <label>RRULE as per <a href="http://www.kanzaki.com/docs/ical/rrule.html" class="text-underline text-blue-500">iCalendar RFC</a>.</label>
+            <pre><code>{{ rrule }}</code></pre>
+        </template>
         <input type="hidden" :name="name" :value="stringify">
     </div>
 </template>
@@ -240,11 +246,11 @@ export default {
 
         return {
             begins_at: {
-                date: value.begins_at && value.begins_at.date && new Date(value.begins_at.date),
+                date: value.begins_at && value.begins_at.date,
                 time: value.begins_at && value.begins_at.time
             },
             ends_at: {
-                date: value.ends_at && value.ends_at.date && new Date(value.ends_at.date),
+                date: value.ends_at && value.ends_at.date,
                 time: value.ends_at && value.ends_at.time
             },
             byday: value.byday,
